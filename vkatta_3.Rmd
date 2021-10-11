@@ -73,6 +73,7 @@ get.sensitivity.obj(lprec) # Reduced Cost
 lprec.dual <- read.lp("vkatta_3.dual.lp")
 
 lp.control(lprec,sense='min')
+set.bounds(lprec.dual, lower = c(0,0,0,0,0,0,0,0,0,-Inf,-Inf), upper = rep(Inf,11))
   
 ```
 
