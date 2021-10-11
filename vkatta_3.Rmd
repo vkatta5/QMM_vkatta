@@ -1,0 +1,92 @@
+---
+title: "WeighIt Corporation- Assignment 3"
+author: "Vamshee Deepak Goud Katta"
+date: "10/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Weigelt Production
+
+## Reading the objective fn and constraints from lp file
+
+```{r}
+library(lpSolveAPI)
+
+lprec <- read.lp("vkatta_3.lp")
+
+lp.control(lprec,sense='max')
+
+```
+
+## Arranging the values in table with constraints against products
+
+```{r}
+
+RowNames <- c("P1cap", "P2cap", "P3cap", "P1space", "P2space", "P3space", "LSales", "MSales", "SSales", "P1-P2", "P1-P3")
+ColNames <- c("Large1", "Medium1", "Small1", "Large2", "Medium2", "Small2", "Large3", "Medium3", "Small3")
+dimnames(lprec) <- list(RowNames, ColNames)
+
+```
+
+## Solving the LP problem using the Solve() function
+
+```{r}
+
+solve(lprec)
+
+get.objective(lprec)
+
+get.variables(lprec)
+
+get.constraints(lprec)
+
+```
+
+## Arranging the solution of the LP problem with variables against values
+
+```{r}
+
+solution <- data.frame(ColNames, get.variables(lprec)) # Solution of the problem 
+colnames(solution) <- c("variable", "value")
+solution
+
+```
+
+## Finding shadow prices and reduced cost of the solved LP problem
+
+```{r}
+
+get.sensitivity.rhs(lprec) # Shadow Prices
+
+get.sensitivity.obj(lprec) # Reduced Cost
+
+```
+
+## Reading Objective fn and Constraints from lp file
+
+```{r}
+
+lprec.dual <- read.lp("vkatta_3.dual.lp")
+
+lp.control(lprec,sense='min')
+  
+```
+
+## Solving Dual of the LP problem
+
+```{r}
+
+solve(lprec.dual)
+
+get.objective(lprec.dual)
+
+get.variables(lprec.dual)
+
+get.constraints(lprec.dual)
+
+```
+
