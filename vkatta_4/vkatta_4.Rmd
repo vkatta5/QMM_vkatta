@@ -1,0 +1,82 @@
+---
+title: "vkatta_4"
+author: "Vamshee Deepak Goud Katta"
+date: "10/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Heart Start AEDs
+
+## Reading LP file
+
+```{r}
+
+library(lpSolve)
+library(lpSolveAPI)
+
+lprec <- read.lp("vkatta_4.lp")
+
+```
+
+## Solving the LP problem using the Solve() function
+
+```{r}
+
+solve(lprec)
+
+get.objective(lprec)
+
+get.variables(lprec)
+
+get.constraints(lprec)
+
+```
+
+## Arranging the solution of the LP problem with variables against values
+
+```{r}
+
+ColNames <- c("AW1", "AW2", "AW3", "BW1", "BW2", "BW3")
+solution <- data.frame(ColNames, get.variables(lprec)) # Solution of the problem 
+colnames(solution) <- c("variable", "value")
+solution
+
+```
+
+## Hence, Plant A is to produce 100 units and ship 60 units to Warehouse2 and 40 units to Warehouse3
+## Plant B is to produce 110 units and ship 80 units to Warehouse1 and 30 units to Warehouse3
+
+# 2. Texxon Oil Distribution
+
+## 1) Minimum Cost of providing oil to refineries
+
+Given,  Capacity of wells W1, W2 and W3 are 93, 88 and 95 respectively
+        Requirements of refineries R1, R2, R3, R4, R5 are 30, 57, 48, 91 and 48 respectively
+        
+Let,  Xji be the flow of oil from well i to Pump j
+      where, i= W1,2,3
+Charges levied on pipeline usage are as follows:
+      AW1 - Well1 to PumpA = 1.52       AR1 - PumpA to Refinery1 = 5.15
+      AW2 - Well2 to PumpA = 1.70       BR1 - PumpB to Refinery1 = 5.12
+      AW3 - Well3 to PumpA = 1.45       CR1 - PumpB to Refinery1 = 5.32
+      BW1 - Well1 to PumpB = 1.60       AR2 - PumpA to Refinery2 = 5.69
+      BW2 - Well2 to PumpB = 1.63       BR2 - PumpB to Refinery2 = 5.47
+      BW3 - Well3 to PumpB = 1.57       CR2 - PumpC to Refinery2 = 6.16
+      CW1 - Well1 to PumpC = 1.40       AR3 - PumpA to Refinery3 = 6.13
+      CW2 - Well2 to PumpC = 1.55       BR3 - PumpB to Refinery3 = 6.05
+      CW3 - Well3 to PumpC = 1.30       CR3 - PumpC to Refinery3 = 6.25
+      AR4 - PumpA to Refinery4 = 5.63   BR4 - PumpB to Refinery4 = 6.12
+      CR4 - PumpC to Refinery4 = 6.17   AR5 - PumpA to Refinery5 = 5.80
+      BR5 - PumpB to Refinery5 = 5.71   CR5 - PumpC to Refinery5 = 5.87
+      
+Here, the minimum cost function is:
+      
+      
+Where,
+      AW1 + BW1 + CW1 <= 93
+      AW2 + BW2 + CW2 <= 88
+      AW3 + BW3 + CW3 <= 95
