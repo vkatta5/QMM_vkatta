@@ -19,7 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(lpSolve)
 library(lpSolveAPI)
-
 lprec <- read.lp("vkatta_4.lp")
 
 ```
@@ -56,29 +55,56 @@ solution
 
 ## 1) Minimum Cost of providing oil to refineries
 
-Given,  Capacity of wells W1, W2 and W3 are 93, 88 and 95 respectively
-        Requirements of refineries R1, R2, R3, R4, R5 are 30, 57, 48, 91 and 48 respectively
+## Given,  
+
+### Capacity of wells W1, W2 and W3 are 93, 88 and 95 respectively
+### Requirements of refineries R1, R2, R3, R4, R5 are 30, 57, 48, 91 and 48 respectively
         
-Let,  Xji be the flow of oil from well i to Pump j
-      where, i= W1,2,3
-Charges levied on pipeline usage are as follows:
-      AW1 - Well1 to PumpA = 1.52       AR1 - PumpA to Refinery1 = 5.15
-      AW2 - Well2 to PumpA = 1.70       BR1 - PumpB to Refinery1 = 5.12
-      AW3 - Well3 to PumpA = 1.45       CR1 - PumpB to Refinery1 = 5.32
-      BW1 - Well1 to PumpB = 1.60       AR2 - PumpA to Refinery2 = 5.69
-      BW2 - Well2 to PumpB = 1.63       BR2 - PumpB to Refinery2 = 5.47
-      BW3 - Well3 to PumpB = 1.57       CR2 - PumpC to Refinery2 = 6.16
-      CW1 - Well1 to PumpC = 1.40       AR3 - PumpA to Refinery3 = 6.13
-      CW2 - Well2 to PumpC = 1.55       BR3 - PumpB to Refinery3 = 6.05
-      CW3 - Well3 to PumpC = 1.30       CR3 - PumpC to Refinery3 = 6.25
-      AR4 - PumpA to Refinery4 = 5.63   BR4 - PumpB to Refinery4 = 6.12
-      CR4 - PumpC to Refinery4 = 6.17   AR5 - PumpA to Refinery5 = 5.80
-      BR5 - PumpB to Refinery5 = 5.71   CR5 - PumpC to Refinery5 = 5.87
+## Let,
+      Xij be the flow of oil from well i to Pump j
+      where, i= W1, W2, W3 and j= A, B, C
       
-Here, the minimum cost function is:
+      Yij be the flow of oil from Pump i to Refinery j
+      where, i= A, B, C and j= R1, R2, R3, R4, R5
       
+## Charges levied on pipeline usage are as follows:
+AW1 - Well1 to PumpA = 1.52       
+AW2 - Well2 to PumpA = 1.70       
+AW3 - Well3 to PumpA = 1.45       
+BW1 - Well1 to PumpB = 1.60       
+BW2 - Well2 to PumpB = 1.63       
+BW3 - Well3 to PumpB = 1.57       
+CW1 - Well1 to PumpC = 1.40       
+CW2 - Well2 to PumpC = 1.55       
+CW3 - Well3 to PumpC = 1.30       
+AR1 - PumpA to Refinery1 = 5.15       
+BR1 - PumpB to Refinery1 = 5.12       
+CR1 - PumpB to Refinery1 = 5.32       
+AR2 - PumpA to Refinery2 = 5.69       
+BR2 - PumpB to Refinery2 = 5.47       
+CR2 - PumpC to Refinery2 = 6.16       
+AR3 - PumpA to Refinery3 = 6.13       
+BR3 - PumpB to Refinery3 = 6.05       
+CR3 - PumpC to Refinery3 = 6.25       
+AR4 - PumpA to Refinery4 = 5.63       
+BR4 - PumpB to Refinery4 = 6.12       
+CR4 - PumpC to Refinery4 = 6.17       
+AR5 - PumpA to Refinery5 = 5.80       
+BR5 - PumpB to Refinery5 = 5.71       
+CR5 - PumpC to Refinery5 = 5.87
       
-Where,
-      AW1 + BW1 + CW1 <= 93
-      AW2 + BW2 + CW2 <= 88
-      AW3 + BW3 + CW3 <= 95
+## Here, the minimum cost function is:
+Min : 1.52AW1+ 1.70AW2+ 1.45AW3+ 1.60BW1+ 1.63BW2+ 1.57BW3+ 1.40CW1+ 1.55CW2+ 1.30CW3+ 5.15AR1+ 5.12BR1+ 5.32CR1+ 5.69AR2+ 5.47BR2+ 6.16CR2+
+6.13AR3+ 6.05BR3+ 6.25CR3+ 5.63AR4+ 6.12BR4+ 6.17CR4+ 5.80AR5+ 5.71BR5+ 5.87CR5
+      
+## Where,
+AW1 + BW1 + CW1 <= 93       
+AW2 + BW2 + CW2 <= 88       
+AW3 + BW3 + CW3 <= 95       
+AR1 + BR1 + CR1 = 30        
+AR2 + BR2 + CR2 = 57        
+AR3 + BR3 + CR3 = 48        
+AR4 + BR4 + CR4 = 91        
+AR5 + BR5 + CR5 = 48
+
+### Here, wells 1 and 3 are used to their capacity
