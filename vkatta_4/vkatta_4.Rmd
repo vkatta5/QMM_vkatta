@@ -2,7 +2,9 @@
 title: "vkatta_4"
 author: "Vamshee Deepak Goud Katta"
 date: "10/25/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
