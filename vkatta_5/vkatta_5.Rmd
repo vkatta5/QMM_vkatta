@@ -1,0 +1,212 @@
+---
+title: "Assignment 5"
+author: "Vamshee Deepak Goud Katta"
+date: "11/8/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. DEA Analysis - Hope Valley Health Care Association
+
+## 1) Formulating and Performing DEA Analysis
+## 2) Peers and Lambdas under each assumption
+
+```{r}
+
+library(Benchmarking)
+
+x <- matrix(c(150,400,320,520,350,320,0.2,0.7,1.2,2.0,1.2,0.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000),ncol = 2)
+
+colnames(x) <- c("Staff Hours per Day","Supplies per Day")
+colnames(y) <- c("Reimbursed Patient-Days","Privately Paid Patient-Days")
+
+Hope <- cbind(x,y)
+Hope
+
+```
+
+### Performing DEA analysis using FDH assumption
+
+```{r}
+FDH <- dea(x,y,RTS = "fdh")
+FDH
+```
+
+```{r}
+# Peers under FDH assumption
+peers(FDH)
+```
+
+```{r}
+# Lambdas under FDH assumption
+lambda(FDH)
+```
+
+
+### Performing DEA analysis using CRS assumption
+
+```{r}
+CRS <- dea(x,y,RTS = "crs")
+CRS
+```
+
+```{r}
+# Peers under CRS assumption
+peers(CRS)
+```
+
+```{r}
+# Lambdas under CRS assumption
+lambda(CRS)
+```
+
+
+### Performing DEA analysis using VRS assumption
+
+```{r}
+VRS <- dea(x,y,RTS = "vrs")
+VRS
+```
+
+```{r}
+# Peers under VRS assumption
+peers(VRS)
+```
+
+```{r}
+# Lambdas under VRS assumption
+lambda(VRS)
+```
+
+### Performing DEA analysis using IRS assumption
+
+```{r}
+IRS <- dea(x,y,RTS = "irs")
+IRS
+```
+
+```{r}
+# Peers under IRS assumption
+peers(IRS)
+```
+
+```{r}
+# Lambdas under IRS assumption
+lambda(IRS)
+```
+
+### Performing DEA analysis using DRS assumption
+
+```{r}
+DRS <- dea(x,y,RTS = "drs")
+DRS
+```
+
+```{r}
+# Peers under DRS assumption
+peers(DRS)
+```
+
+```{r}
+# Lambdas under DRS assumption
+lambda(DRS)
+```
+
+### Performing DEA analysis using FRH assumption
+
+```{r}
+FRH <- dea(x,y,RTS = "add")
+FRH
+```
+
+```{r}
+# Peers under FRH assumption
+peers(FRH)
+```
+
+```{r}
+# Lambdas under FRH assumption
+lambda(FRH)
+```
+
+## 3) Summary of DEA analysis under all assumptions
+
+```{r}
+
+Summary <- data.frame(FDH=c(1, 1, 1, 1, 1, 1), CRS=c(1, 1, 1, 1, 0.9775, 0.8675), VRS=c(1, 1, 1, 1, 1, 0.8963), IRS=c(1, 1, 1, 1, 1,0.8963), DRS=c(1, 1, 1, 1, 0.9775, 0.8675), FRH=c(1, 1, 1, 1, 1, 1))
+DEA <- cbind(Hope, Summary)
+DEA
+
+```
+
+## 4) Analysis comparision
+
+DMUs 1, 2, 3 and 4 have efficiency value of 1 under all the above assumptions upon DEA analysis.
+
+DMU5 has efficiency value of 1 under FDH, VRS, IRS and FRH assumptions but the efficiency value is reduced to 0.9775 under CRS and DRS assumptions.
+
+DMU6 has efficiency value of 1 under FDH and FRH assumptions, 0.8675 under CRS and DRS assumptions and value of 0.8963 under VRS and IRS assumptions.
+
+
+# 2. Goal Programming - Emax Corporation
+
+Based on the problem statement, the goal is to:
+
+Maximize Z = P - 6C - 3D 
+
+P = total (discounted) profit over the life of the new products, 
+C = change (in either direction) in the current level of employment, 
+D = decrease (if any) in next year’s earnings from the current year’s level.
+
+Subject to:
+Total Profit: P = 20X1 + 15X2 + 25*X3
+Employment Level: 6X1 + 4X2 + 5*X3 = 50
+Earnings Next Year: 8X1 + 7X2 + 5*X3 >= 75
+
+As a result, the auxiliary variables become:
+Y1 = 6X1 + 4X2 + 5X3 - 50 Y2 = 8X1 + 7X2 + 5X3 - 75
+(Y1P - Y1M) = 6X1 + 4X2 + 5X3 - 50 (Y2P - Y2M) = 8X1 + 7X2 + 5X3 - 75
+
+Therefore, the problem statement is:
+
+Maximize Z = 20X1 + 15X2 + 25X3 - 6Y1P - 6Y1M - 3Y2M
+
+Where,
+6X1 + 4X2 + 5X3 - (Y1P - Y1M) = 50
+8X1 + 7X2 + 5X3 - (Y2P - Y2M) = 75
+X1, X2, X3, Y1P, Y1M, Y2P, Y2M >= 0
+
+Lastly, we will run this problem in R as a linear programming model and discuss the results.
+
+## Reading data
+
+```{r}
+
+library(lpSolve)
+library(lpSolveAPI)
+Goal <- read.lp("vkatta_5.lp")
+
+```
+
+## Solving the LP
+
+```{r}
+
+solve(Goal)
+
+get.objective(Goal)
+
+get.variables(Goal)
+
+```
+
+
+Based on the output of the linear programming model, we can conclude the below;
+
+X1 = 0; X2 = 0; X3 = 15; Y1P = 25; Y1M = 0; Y2M = 0; Y2P = 0.
+
+Therefore, we can conclude that the product mix should only contain product 3. With this mix, there would be an object value of 225 units. The goal for earnings for next year is fully met. However, the employment level goal will be exceeded  by  25  units,  which is 2,500 employees and a penalty of 150 units to the objective function.
