@@ -1,0 +1,111 @@
+---
+title: "Assignment - 6"
+author: "Vamshee Deepak Goud Katta"
+date: "11/22/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Reading data
+
+```{r}
+
+library(lpSolve)
+library(lpSolveAPI)
+Arc <- read.lp("vkatta_6.lp")
+lp.control(Arc, sense='max')
+
+```
+
+## Solving the LP
+
+```{r}
+
+solve(Arc)
+
+get.objective(Arc)
+
+get.variables(Arc)
+
+```
+
+## 1. Formulating with integer restriction
+
+```{r}
+
+Port1 <- make.lp(0,8)
+lp.control(Port1, sense="max")
+
+set.objfn(Port1, c(4,6.5,5.9,5.4,5.15,10,8.4,6.25))
+set.type(Port1, c(1:8), type = "integer")
+
+add.constraint(Port1, c(40,50,80,60,45,60,30,25),"<=",2500000,indices = c(1:8))
+add.constraint(Port1, 1000,">=",0,indices = 1)
+add.constraint(Port1, 1000,">=",0,indices = 2)
+add.constraint(Port1, 1000,">=",0,indices = 3)
+add.constraint(Port1, 1000,">=",0,indices = 4)
+add.constraint(Port1, 1000,">=",0,indices = 5)
+add.constraint(Port1, 1000,">=",0,indices = 6)
+add.constraint(Port1, 1000,">=",0,indices = 7)
+add.constraint(Port1, 1000,">=",0,indices = 8)
+add.constraint(Port1, 40,">=",100000,indices = 1)
+add.constraint(Port1, 50,">=",100000,indices = 2)
+add.constraint(Port1, 80,">=",100000,indices = 3)
+add.constraint(Port1, 60,">=",100000,indices = 4)
+add.constraint(Port1, 45,">=",100000,indices = 5)
+add.constraint(Port1, 60,">=",100000,indices = 6)
+add.constraint(Port1, 30,">=",100000,indices = 7)
+add.constraint(Port1, 25,">=",100000,indices = 8)
+add.constraint(Port1, c(40,50,80),"<=",1000000,indices = c(1,2,3))
+add.constraint(Port1, c(60,45,60),"<=",1000000,indices = c(4,5,6))
+add.constraint(Port1, c(30,25),"<=",1000000,indices = c(7,8))
+
+solve(Port1)
+
+get.objective(Port1)
+get.variables(Port1)
+get.constraints(Port1)
+
+```
+
+## 2. Formulating without integer restriction
+
+```{r}
+
+Port2<-make.lp(0,8)
+lp.control(Port2,sense="max")
+
+set.objfn(Port2,c(4,6.5,5.9,5.4,5.15,10,8.4,6.25))
+
+add.constraint(Port2, c(40,50,80,60,45,60,30,25),"<=",2500000,indices = c(1:8))
+add.constraint(Port2, 1000,">=",0,indices = 1)
+add.constraint(Port2, 1000,">=",0,indices = 2)
+add.constraint(Port2, 1000,">=",0,indices = 3)
+add.constraint(Port2, 1000,">=",0,indices = 4)
+add.constraint(Port2, 1000,">=",0,indices = 5)
+add.constraint(Port2, 1000,">=",0,indices = 6)
+add.constraint(Port2, 1000,">=",0,indices = 7)
+add.constraint(Port2, 1000,">=",0,indices = 8)
+add.constraint(Port2, 40,">=",100000,indices = 1)
+add.constraint(Port2, 50,">=",100000,indices = 2)
+add.constraint(Port2, 80,">=",100000,indices = 3)
+add.constraint(Port2, 60,">=",100000,indices = 4)
+add.constraint(Port2, 45,">=",100000,indices = 5)
+add.constraint(Port2, 60,">=",100000,indices = 6)
+add.constraint(Port2, 30,">=",100000,indices = 7)
+add.constraint(Port2, 25,">=",100000,indices = 8)
+add.constraint(Port2, c(40,50,80),"<=",1000000,indices = c(1,2,3))
+add.constraint(Port2, c(60,45,60),"<=",1000000,indices = c(4,5,6))
+add.constraint(Port2, c(30,25),"<=",1000000,indices = c(7,8))
+
+solve(Port2)
+
+get.objective(Port2)
+get.variables(Port2)
+get.constraints(Port2)
+
+```
